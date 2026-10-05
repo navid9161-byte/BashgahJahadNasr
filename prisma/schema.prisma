@@ -1,0 +1,178 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// نقش‌ها: MEMBER | ADMIN
+// وضعیت عضویت: PENDING | ACTIVE | REJECTED | SUSPENDED
+model User {
+  id             String   @id @default(cuid())
+  username       String   @unique // برای پرسنل: کد ملی
+  passwordHash   String
+  role           String   @default("MEMBER")
+  status         String   @default("PENDING")
+
+  firstName      String
+  lastName       String
+  fatherName     String?
+  nationalCode   String?  @unique
+  personnelCode  String?  @unique
+  mobile         String?
+  birthDate      String? // تاریخ شمسی به صورت 1370/05/12
+  gender         String? // MALE | FEMALE
+  maritalStatus  String? // SINGLE | MARRIED
+  company        String? // شرکت زیرمجموعه
+  department     String? // واحد سازمانی
+  jobTitle       String?
+  employmentType String? // رسمی، قراردادی، ...
+  city           String? // محل خدمت
+  education      String?
+  bloodType      String?
+  height         Int?
+  weight         Int?
+  medicalNotes   String? // بیماری‌ها و آسیب‌دیدگی‌ها
+  sportHistory   String? // سوابق ورزشی
+  interests      String  @default("[]") // آرایه JSON از شناسه رشته‌ها
+  emergencyName  String?
+  emergencyPhone String?
+  address        String?
+  photo          String?
+  adminNote      String?
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  enrollments    Enrollment[]
+  responses      SurveyResponse[]
+}
+
+model Sport {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  name        String
+  icon        String    @default("trophy")
+  summary     String    @default("")
+  description String    @default("")
+  image       String?
+  order       Int       @default(0)
+  active      Boolean   @default(true)
+  programs    Program[]
+  createdAt   DateTime  @default(now())
+}
+
+// کلاس‌ها و برنامه‌های تمرینی
+model Program {
+  id          String       @id @default(cuid())
+  title       String
+  sportId     String
+  sport       Sport        @relation(fields: [sportId], references: [id], onDelete: Cascade)
+  coach       String?
+  gender      String       @default("ALL") // MALE | FEMALE | ALL
+  days        String // مثلا: شنبه، دوشنبه، چهارشنبه
+  startTime   String
+  endTime     String
+  location    String
+  city        String       @default("کرمان")
+  capacity    Int          @default(20)
+  fee         Int          @default(0) // تومان — صفر یعنی رایگان
+  startDate   String?
+  description String?
+  isOpen      Boolean      @default(true)
+  enrollments Enrollment[]
+  createdAt   DateTime     @default(now())
+}
+
+// PENDING | APPROVED | REJECTED | CANCELLED
+model Enrollment {
+  id        String   @id @default(cuid())
+  userId    String
+  programId String
+  status    String   @default("PENDING")
+  note      String?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  program   Program  @relation(fields: [programId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, programId])
+}
+
+model News {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     String
+  summary   String   @default("")
+  body      String   @default("")
+  cover     String?
+  category  String   @default("NEWS") // NEWS | NOTICE
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model GalleryImage {
+  id        String   @id @default(cuid())
+  title     String   @default("")
+  album     String   @default("عمومی")
+  src       String
+  createdAt DateTime @default(now())
+}
+
+// kind: POLL (نظرسنجی) | NEEDS (نیازسنجی)
+model Survey {
+  id          String           @id @default(cuid())
+  title       String
+  description String           @default("")
+  kind        String           @default("POLL")
+  isActive    Boolean          @default(true)
+  createdAt   DateTime         @default(now())
+  questions   Question[]
+  responses   SurveyResponse[]
+}
+
+// type: SINGLE | MULTI | TEXT | RATING
+model Question {
+  id       String   @id @default(cuid())
+  surveyId String
+  survey   Survey   @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  text     String
+  type     String   @default("SINGLE")
+  options  String   @default("[]") // آرایه JSON
+  required Boolean  @default(true)
+  order    Int      @default(0)
+  answers  Answer[]
+}
+
+model SurveyResponse {
+  id        String   @id @default(cuid())
+  surveyId  String
+  userId    String
+  survey    Survey   @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  answers   Answer[]
+  createdAt DateTime @default(now())
+
+  @@unique([surveyId, userId])
+}
+
+model Answer {
+  id         String         @id @default(cuid())
+  responseId String
+  questionId String
+  value      String // برای چندگزینه‌ای: آرایه JSON
+  response   SurveyResponse @relation(fields: [responseId], references: [id], onDelete: Cascade)
+  question   Question       @relation(fields: [questionId], references: [id], onDelete: Cascade)
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String
+  subject   String
+  body      String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}

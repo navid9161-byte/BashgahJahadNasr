@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-vazir), ui-sans-serif, system-ui, sans-serif;
+
+  --color-navy-50: #eef2ff;
+  --color-navy-100: #dfe6fd;
+  --color-navy-200: #bccaf8;
+  --color-navy-300: #8ea4f0;
+  --color-navy-400: #5a77e3;
+  --color-navy-500: #3352cf;
+  --color-navy-600: #1f3bb3;
+  --color-navy-700: #172d93;
+  --color-navy-800: #12237a;
+  --color-navy-900: #0c1858;
+  --color-navy-950: #070e36;
+
+  --color-brand-yellow: #ffe01a;
+  --color-brand-yellow-dark: #f2c400;
+  --color-brand-ink: #34306a;
+
+  --animate-fade-up: fade-up 0.7s ease-out both;
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body {
+    @apply bg-slate-50 text-slate-800 antialiased;
+    font-feature-settings: "ss01";
+  }
+  ::selection { @apply bg-brand-yellow text-navy-900; }
+  input, select, textarea, button { font: inherit; }
+}
+
+@utility container-x { @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8; }
+
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold transition
+    focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy-500 disabled:cursor-not-allowed disabled:opacity-60;
+}
+@utility btn-primary { @apply btn bg-navy-800 text-white shadow-lg shadow-navy-900/20 hover:bg-navy-700; }
+@utility btn-yellow { @apply btn bg-brand-yellow text-navy-900 shadow-lg shadow-yellow-500/20 hover:bg-brand-yellow-dark; }
+@utility btn-outline { @apply btn border border-slate-300 bg-white text-slate-700 hover:border-navy-400 hover:text-navy-700; }
+@utility btn-ghost { @apply btn text-slate-600 hover:bg-slate-100; }
+@utility btn-danger { @apply btn bg-rose-600 text-white hover:bg-rose-700; }
+@utility btn-sm { @apply rounded-lg px-3 py-1.5 text-xs; }
+
+@utility input {
+  @apply w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder:text-slate-400
+    transition focus:border-navy-500 focus:outline-none focus:ring-4 focus:ring-navy-500/15 disabled:bg-slate-100;
+}
+@utility label { @apply mb-1.5 block text-sm font-semibold text-slate-700; }
+@utility card { @apply rounded-2xl border border-slate-200/80 bg-white shadow-sm; }
+
+@utility section-title { @apply text-2xl font-black text-navy-900 sm:text-3xl; }
+@utility section-kicker {
+  @apply mb-2 inline-flex items-center gap-2 text-sm font-bold text-navy-600;
+  &::before { content: ""; @apply h-1 w-6 rounded-full bg-brand-yellow; }
+}
+
+@utility prose-fa {
+  @apply leading-8 text-slate-700;
+  & p { @apply mb-4; }
+}
+
+@utility table-x {
+  @apply w-full text-right text-sm;
+  & th { @apply whitespace-nowrap bg-slate-50 px-4 py-3 font-bold text-slate-600; }
+  & td { @apply border-t border-slate-100 px-4 py-3 align-middle; }
+  & tbody tr:hover { @apply bg-slate-50/70; }
+}
+
+/* بافت هاف‌تون و ضربه‌قلم‌های زرد در هیرو */
+.halftone {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.18) 1.2px, transparent 1.4px);
+  background-size: 9px 9px;
+}
+.hero-mask {
+  --fade-x: linear-gradient(to right, transparent 0%, #000 14%, #000 86%, transparent 100%);
+  --fade-y: linear-gradient(to bottom, transparent 0%, #000 10%, #000 84%, transparent 100%);
+  -webkit-mask-image: var(--fade-x), var(--fade-y);
+  -webkit-mask-composite: source-in;
+  mask-image: var(--fade-x), var(--fade-y);
+  mask-composite: intersect;
+}
