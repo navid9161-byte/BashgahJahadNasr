@@ -20,7 +20,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
           </div>
           <div className="p-6 sm:p-8">
             <LoginForm next={next} />
-            <p className="mt-5 text-center text-xs leading-6 text-slate-500">نام کاربری پرسنل، کد ملی یا کد پرسنلی است.</p>
+            <p className="mt-5 text-center text-xs leading-6 text-slate-500">نام کاربری پرسنل، کد ملی، کد پرسنلی یا شماره موبایل است.</p>
           </div>
         </div>
       </div>

@@ -14,6 +14,7 @@ const sports = [
   { slug: "mountaineering", name: "کوهنوردی", icon: "mountain", summary: "برنامه‌های کوهپیمایی و طبیعت‌گردی خانوادگی" },
   { slug: "chess", name: "شطرنج", icon: "chess", summary: "مسابقات و آموزش شطرنج برای پرسنل و خانواده‌ها" },
   { slug: "table-tennis", name: "تنیس روی میز", icon: "target", summary: "تمرینات و مسابقات داخلی تنیس روی میز" },
+  { slug: "tennis", name: "تنیس", icon: "activity", summary: "آموزش و تمرین تنیس برای پرسنل و خانواده‌ها" },
 ];
 
 async function main() {

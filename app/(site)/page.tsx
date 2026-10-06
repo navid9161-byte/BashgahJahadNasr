@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-  ArrowLeft, CalendarDays, ClipboardList, Clock, HeartPulse, MapPin, Star, Trophy, Users,
+  ArrowLeft, CalendarDays, ChevronLeft, ClipboardList, Clock, HeartPulse, MapPin, Medal, Trophy, Users,
 } from "lucide-react";
 import { Hero } from "@/components/home/hero";
 import { SportIcon } from "@/components/sport-icon";
@@ -9,19 +9,20 @@ import { Badge } from "@/components/badge";
 import { getCurrentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { site } from "@/lib/site";
+import { homeSportOrder, sportImage } from "@/lib/sport-images";
 import { fa, formatDate, formatNumber, formatPrice, labels } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
 const features = [
-  { icon: Star, title: "ورزش برای همه", text: "در تمامی رده‌های سنی" },
-  { icon: Users, title: "تیم حرفه‌ای", text: "با مربیان مجرب" },
-  { icon: HeartPulse, title: "سلامت و نشاط", text: "زندگی سالم‌تر" },
-  { icon: Trophy, title: "توسعه استعدادها", text: "ورزش برای آینده بهتر" },
+  { icon: Trophy, title: "توسعه توانمندی", text: "در رشته‌های مختلف", fill: false },
+  { icon: HeartPulse, title: "سلامت جسم و روان", text: "", fill: true },
+  { icon: Users, title: "فضای حرفه‌ای", text: "و استاندارد", fill: true },
+  { icon: Medal, title: "مدیریت مجرب", text: "و مربیان متخصص", fill: false },
 ];
 
 export default async function HomePage() {
-  const [user, sports, programs, news, gallery, memberCount, programCount] = await Promise.all([
+  const [user, sports, programs, news, gallery] = await Promise.all([
     getCurrentUser(),
     db.sport.findMany({ where: { active: true }, orderBy: { order: "asc" } }),
     db.program.findMany({
@@ -32,89 +33,85 @@ export default async function HomePage() {
     }),
     db.news.findMany({ where: { published: true }, orderBy: { createdAt: "desc" }, take: 3 }),
     db.galleryImage.findMany({ orderBy: { createdAt: "desc" }, take: 6 }),
-    db.user.count({ where: { role: "MEMBER", status: "ACTIVE" } }),
-    db.program.count({ where: { isOpen: true } }),
   ]);
 
-  const years = new Intl.DateTimeFormat("en-u-ca-persian", { year: "numeric" }).format(new Date());
-  const stats = [
-    { value: formatNumber(sports.length), label: "رشته ورزشی" },
-    { value: formatNumber(programCount), label: "کلاس فعال" },
-    { value: formatNumber(memberCount), label: "عضو فعال" },
-    { value: fa(Math.max(1, parseInt(years) - 1397)), label: "سال فعالیت" },
-  ];
+  const rank = (slug: string) => {
+    const i = homeSportOrder.indexOf(slug);
+    return i === -1 ? 100 : i;
+  };
+  const homeSports = [...sports].sort((x, y) => rank(x.slug) - rank(y.slug) || x.order - y.order).slice(0, 7);
 
   return (
     <>
-      <Hero
-        sports={sports.map((s) => ({ slug: s.slug, name: s.name, icon: s.icon }))}
-        user={user ? { name: `${user.firstName} ${user.lastName}`, isAdmin: user.role === "ADMIN" } : null}
-      />
+      <Hero user={user ? { name: `${user.firstName} ${user.lastName}`, isAdmin: user.role === "ADMIN" } : null} />
 
       {/* نوار ویژگی‌ها */}
-      <section className="relative bg-white">
-        <div className="container-x grid grid-cols-2 gap-y-8 py-10 lg:grid-cols-4">
-          {features.map(({ icon: Icon, title, text }, i) => (
-            <div key={title} className={`flex items-center justify-center gap-4 px-4 ${i % 2 ? "border-r border-slate-200" : ""} ${i === 2 ? "lg:border-r" : ""}`}>
-              <Icon className="size-11 shrink-0 text-navy-800" strokeWidth={1.6} />
-              <div>
-                <p className="font-black text-navy-900">{title}</p>
-                <p className="text-sm text-slate-500">{text}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="bg-navy-800 py-5">
-          <div className="container-x flex items-center justify-center gap-6 text-white">
-            <span className="hidden h-px flex-1 bg-white/40 sm:block" />
-            <p className="text-center text-lg font-black sm:text-xl">با ما قوی‌تر، سالم‌تر و موفق‌تر باشید</p>
-            <span className="hidden h-px flex-1 bg-white/40 sm:block" />
-          </div>
-        </div>
-      </section>
-
-      {/* آمار */}
-      <section className="container-x -mt-px">
-        <div className="relative -mb-10 mt-12 grid grid-cols-2 gap-4 sm:grid-cols-4">
-          {stats.map((s) => (
-            <div key={s.label} className="card p-6 text-center transition hover:-translate-y-1 hover:shadow-lg">
-              <p className="text-4xl font-black text-navy-800">{s.value}</p>
-              <p className="mt-1 text-sm font-semibold text-slate-500">{s.label}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* رشته‌ها */}
-      <section className="container-x pt-24">
-        <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <p className="section-kicker">رشته‌های ورزشی</p>
-            <h2 className="section-title">در رشته مورد علاقه‌ات بدرخش</h2>
-          </div>
-          <Link href="/sports" className="btn-outline">همه رشته‌ها <ArrowLeft className="size-4" /></Link>
-        </div>
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-          {sports.map((s) => (
-            <Link
-              key={s.id}
-              href={`/sports/${s.slug}`}
-              className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-navy-700 to-navy-900 p-6 text-white shadow-lg shadow-navy-900/10 transition hover:-translate-y-1"
-            >
-              <div className="halftone absolute inset-0 opacity-30" />
-              <div className="absolute -left-8 -top-8 size-24 rounded-full bg-brand-yellow/20 transition group-hover:scale-150" />
-              <span className="relative grid size-14 place-items-center rounded-2xl bg-brand-yellow text-navy-900">
-                <SportIcon name={s.icon} className="size-7" />
+      <section className="bg-white">
+        <div className="mx-auto grid max-w-[1400px] grid-cols-2 gap-y-8 px-4 py-9 lg:grid-cols-4">
+          {features.map(({ icon: Icon, title, text, fill }, i) => (
+            <div key={title} className={`flex items-center justify-center gap-4 px-3 ${i % 2 ? "border-r border-slate-300" : ""} ${i === 2 ? "lg:border-r" : ""}`}>
+              <span className="grid size-16 shrink-0 place-items-center rounded-full bg-yellow-100 text-navy-800 ring-8 ring-yellow-50 sm:size-20">
+                <Icon className="size-8 sm:size-10" fill={fill ? "currentColor" : "none"} strokeWidth={fill ? 1.4 : 2.2} />
               </span>
-              <p className="relative mt-5 text-lg font-black">{s.name}</p>
-              <p className="relative mt-1 line-clamp-2 text-xs leading-6 text-white/70">{s.summary}</p>
-            </Link>
+              <p className="text-base font-black leading-7 text-navy-900 sm:text-lg">
+                {title}
+                {text && <span className="block">{text}</span>}
+              </p>
+            </div>
           ))}
+        </div>
+      </section>
+
+      {/* رشته‌های ورزشی */}
+      <section className="relative isolate overflow-hidden bg-navy-950 py-14 text-white">
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_50%_0%,#1b2f9e_0%,#0a1350_70%)]" />
+        <div className="halftone absolute inset-0 -z-10 opacity-20" />
+        <div className="absolute -left-10 -top-10 -z-10 h-64 w-24 rotate-[35deg] bg-brand-yellow/80" />
+        <div className="absolute left-16 -top-16 -z-10 h-64 w-6 rotate-[35deg] bg-navy-400/60" />
+        <div className="absolute -right-10 -bottom-16 -z-10 h-64 w-24 rotate-[35deg] bg-brand-yellow/80" />
+        <div className="absolute right-20 -bottom-16 -z-10 h-64 w-6 rotate-[35deg] bg-navy-400/60" />
+
+        <div className="mx-auto max-w-[1440px] px-4">
+          <div className="mb-10 flex items-center justify-center gap-5">
+            <span className="hidden h-1.5 w-40 rounded-full bg-gradient-to-r from-navy-400 to-brand-yellow sm:block" />
+            <h2 className="text-2xl font-black sm:text-3xl">رشته‌های ورزشی ما</h2>
+            <span className="hidden h-1.5 w-40 rounded-full bg-gradient-to-l from-navy-400 to-brand-yellow sm:block" />
+          </div>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-7 lg:gap-5">
+            {homeSports.map((s) => {
+              const img = sportImage(s);
+              return (
+                <Link
+                  key={s.id}
+                  href={`/sports/${s.slug}`}
+                  className="group overflow-hidden rounded-xl border border-white/20 bg-navy-900 shadow-lg shadow-black/30 transition hover:-translate-y-1.5 hover:border-brand-yellow"
+                >
+                  <div className="relative aspect-[181/126] overflow-hidden bg-navy-800">
+                    {img ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={img} alt={s.name} className="size-full object-cover transition duration-500 group-hover:scale-110" />
+                    ) : (
+                      <div className="grid size-full place-items-center text-brand-yellow"><SportIcon name={s.icon} className="size-14" /></div>
+                    )}
+                  </div>
+                  <div className="flex items-center justify-between gap-2 border-b-4 border-brand-yellow px-3 py-3">
+                    <span className="truncate text-sm font-black sm:text-base">{s.name}</span>
+                    <ChevronLeft className="size-5 shrink-0 text-brand-yellow transition group-hover:-translate-x-1" />
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+          <div className="mt-12 flex items-center justify-center gap-5">
+            <span className="hidden h-1 w-36 rounded-full bg-gradient-to-r from-navy-400 to-brand-yellow sm:block" />
+            <p className="text-center text-lg font-black sm:text-xl">با ما سالم‌تر، قوی‌تر و پرانرژی‌تر باشید</p>
+            <span className="hidden h-1 w-36 rounded-full bg-gradient-to-l from-navy-400 to-brand-yellow sm:block" />
+          </div>
         </div>
       </section>
 
       {/* معرفی */}
-      <section className="container-x mt-24 grid items-center gap-10 lg:grid-cols-2">
+      <section className="container-x mt-20 grid items-center gap-10 lg:grid-cols-2">
         <div className="relative">
           <div className="absolute -bottom-4 -right-4 h-full w-full rounded-3xl bg-brand-yellow" />
           <Image src="/images/hall.jpg" alt="سالن ورزشی چندمنظوره شهید محمد عسکری" width={782} height={438} className="relative w-full rounded-3xl object-cover shadow-xl" />

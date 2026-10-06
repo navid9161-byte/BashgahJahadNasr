@@ -34,10 +34,19 @@ export async function loginAction(_: FormState, formData: FormData): Promise<For
   const key = identifier.toLowerCase();
   if (tooMany(key)) return { error: "تعداد تلاش‌های ناموفق زیاد است. ۱۵ دقیقه دیگر دوباره تلاش کنید." };
 
-  const user = await db.user.findFirst({
-    where: { OR: [{ username: identifier }, { personnelCode: identifier }] },
+  // ورود با نام کاربری/کد ملی، کد پرسنلی یا شماره موبایل
+  const candidates = await db.user.findMany({
+    where: { OR: [{ username: identifier }, { personnelCode: identifier }, { mobile: identifier }] },
+    take: 5,
   });
-  if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
+  let user = null;
+  for (const c of candidates) {
+    if (await bcrypt.compare(password, c.passwordHash)) {
+      user = c;
+      break;
+    }
+  }
+  if (!user) {
     fail(key);
     return { error: "نام کاربری یا رمز عبور اشتباه است" };
   }
