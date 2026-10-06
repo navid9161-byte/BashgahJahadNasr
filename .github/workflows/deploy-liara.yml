@@ -1,0 +1,26 @@
+name: Deploy to Liara
+
+on:
+  push:
+    branches: [claude/jihad-nasr-sports-club-site-y6p5ez, main]
+  workflow_dispatch:
+
+concurrency:
+  group: liara-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Deploy
+        env:
+          LIARA_TOKEN: ${{ secrets.LIARA_API_TOKEN }}
+        run: |
+          if [ -z "$LIARA_TOKEN" ]; then echo "::warning::Secret LIARA_API_TOKEN is not set yet - skipping deploy"; exit 0; fi
+          npm i -g @liara/cli@latest
+          liara deploy --api-token "$LIARA_TOKEN" --detach

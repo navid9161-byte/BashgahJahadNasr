@@ -3,7 +3,8 @@ import { mkdir, writeFile, unlink } from "node:fs/promises";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
 
-export const UPLOAD_ROOT = path.join(process.cwd(), "storage", "uploads");
+// روی سرور (لیارا) با UPLOAD_DIR به دیسک ماندگار اشاره می‌کند
+export const UPLOAD_ROOT = path.resolve(process.env.UPLOAD_DIR || path.join(process.cwd(), "storage", "uploads"));
 const MAX_SIZE = 5 * 1024 * 1024;
 const EXT: Record<string, string> = {
   "image/jpeg": "jpg",
