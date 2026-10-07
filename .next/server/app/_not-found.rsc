@@ -1,0 +1,18 @@
+1:"$Sreact.fragment"
+2:I[9766,[],""]
+3:I[8924,[],""]
+4:I[2619,["2619","static/chunks/2619-3c9e02e22d10480a.js","1356","static/chunks/1356-0e80a9adf127f39c.js","2907","static/chunks/2907-c9a024ea04af28ee.js","13","static/chunks/app/(site)/page-cf8f613d631fe074.js"],""]
+5:I[4431,[],"OutletBoundary"]
+7:I[5278,[],"AsyncMetadataOutlet"]
+9:I[4431,[],"ViewportBoundary"]
+b:I[4431,[],"MetadataBoundary"]
+c:"$Sreact.suspense"
+e:I[7150,[],""]
+:HL["/_next/static/media/4ff1260a1bda0420-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/_next/static/css/21c8238d449dc96f.css","style"]
+0:{"P":null,"b":"AbAGzJXcLFwdgQI9-T47f","p":"","c":["","_not-found"],"i":false,"f":[[["",{"children":["/_not-found",{"children":["__PAGE__",{}]}]},"$undefined","$undefined",true],["",["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/21c8238d449dc96f.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"fa","dir":"rtl","className":"__variable_5b398c","children":["$","body",null,{"className":"min-h-screen font-sans","children":["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","div",null,{"className":"grid min-h-screen place-items-center bg-navy-900 p-6 text-center text-white","children":["$","div",null,{"children":[["$","p",null,{"className":"text-8xl font-black text-brand-yellow","children":"۴۰۴"}],["$","h1",null,{"className":"mt-4 text-2xl font-black","children":"صفحه مورد نظر پیدا نشد"}],["$","$L4",null,{"href":"/","className":"btn-yellow mt-8","children":"بازگشت به صفحه اصلی"}]]}]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}]}]]}],{"children":["/_not-found",["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":[["$","div",null,{"className":"grid min-h-screen place-items-center bg-navy-900 p-6 text-center text-white","children":["$","div",null,{"children":[["$","p",null,{"className":"text-8xl font-black text-brand-yellow","children":"۴۰۴"}],["$","h1",null,{"className":"mt-4 text-2xl font-black","children":"صفحه مورد نظر پیدا نشد"}],["$","$L4",null,{"href":"/","className":"btn-yellow mt-8","children":"بازگشت به صفحه اصلی"}]]}]}],null,["$","$L5",null,{"children":["$L6",["$","$L7",null,{"promise":"$@8"}]]}]]}],{},null,false]},null,false]},null,false],["$","$1","h",{"children":[["$","meta",null,{"name":"robots","content":"noindex"}],[["$","$L9",null,{"children":"$La"}],["$","meta",null,{"name":"next-size-adjust","content":""}]],["$","$Lb",null,{"children":["$","div",null,{"hidden":true,"children":["$","$c",null,{"fallback":null,"children":"$Ld"}]}]}]]}],false]],"m":"$undefined","G":["$e",[]],"s":false,"S":true}
+a:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#12237a"}]]
+6:null
+f:I[622,[],"IconMark"]
+8:{"metadata":[["$","title","0",{"children":"باشگاه فرهنگی ورزشی جهاد نصر کرمان"}],["$","meta","1",{"name":"description","content":"باشگاه فرهنگی ورزشی جهاد نصر کرمان — ثبت‌نام آنلاین کلاس‌های ورزشی، برنامه تمرینات، اخبار و نظرسنجی پرسنل"}],["$","link","2",{"rel":"icon","href":"/images/logo-shield.png"}],["$","$Lf","3",{}]],"error":null,"digest":"$undefined"}
+d:"$8:metadata"
