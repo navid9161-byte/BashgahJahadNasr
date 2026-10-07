@@ -8,8 +8,8 @@
     "start": "next start",
     "lint": "tsc --noEmit",
     "db:push": "prisma db push",
-    "db:seed": "tsx prisma/seed.ts",
-    "setup": "prisma db push && tsx prisma/seed.ts"
+    "db:seed": "node prisma/seed.mjs",
+    "setup": "prisma db push && node prisma/seed.mjs"
   },
   "dependencies": {
     "@prisma/client": "6.19.3",
