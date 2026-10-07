@@ -36,12 +36,8 @@ jobs:
 
       - name: Smoke test on node:22-alpine (same as Liara)
         run: |
-          mkdir -p /tmp/smoke-data
-          docker run -d --name smoke -p 3000:3000 \
-            -v "$PWD/dist:/app:ro" -v /tmp/smoke-data:/app/data -w /app \
-            -e NODE_ENV=production -e PORT=3000 -e HOSTNAME=0.0.0.0 \
-            -e DATABASE_URL=file:/app/data/club.db -e UPLOAD_DIR=/app/data/uploads \
-            node:22-alpine sh ./docker-entrypoint.sh
+          docker build -t smoke-image dist
+          docker run -d --name smoke -p 3000:3000 smoke-image
           for i in $(seq 1 60); do
             if curl -sf -o /dev/null http://localhost:3000/; then break; fi
             sleep 2
