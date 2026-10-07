@@ -16,9 +16,11 @@ WORKDIR /app
 ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1 \
     PORT=3000 \
+    HOSTNAME=0.0.0.0 \
     DATABASE_URL="file:/app/data/club.db" \
     UPLOAD_DIR=/app/data/uploads
 COPY --from=build /app ./
+RUN cp -r .next/static .next/standalone/.next/static && cp -r public .next/standalone/public
 RUN mkdir -p /app/data && chmod +x docker-entrypoint.sh
 EXPOSE 3000
 CMD ["./docker-entrypoint.sh"]

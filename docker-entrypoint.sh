@@ -12,7 +12,7 @@ if [ -z "$AUTH_SECRET" ]; then
   export AUTH_SECRET
 fi
 
-# ساخت/به‌روزرسانی جداول و داده‌های اولیه (بدون حذف داده‌های موجود)
-npx prisma db push --skip-generate
-npx tsx prisma/seed.ts
-exec npx next start -p "${PORT:-3000}"
+# اعمال مهاجرت‌ها و داده‌های اولیه (بدون حذف داده‌های موجود)
+node prisma/migrate.mjs
+node prisma/seed.mjs
+exec node .next/standalone/server.js
