@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>CivilDesk Post 1 — 07:30</title>
+<style>
+  @font-face { font-family: Vazirmatn; font-weight: 400; src: url(fonts/vazirmatn-400.ttf); }
+  @font-face { font-family: Vazirmatn; font-weight: 500; src: url(fonts/vazirmatn-500.ttf); }
+  @font-face { font-family: Vazirmatn; font-weight: 700; src: url(fonts/vazirmatn-700.ttf); }
+  @font-face { font-family: Vazirmatn; font-weight: 900; src: url(fonts/vazirmatn-900.ttf); }
+  :root {
+    --bg: #0A1222; --navy: #13213D; --gold: #F3B433; --gold-light: #FFD166;
+    --text: #E8EDF5; --muted: #93A4BB;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1350px; background: var(--bg); }
+  body { font-family: Vazirmatn, sans-serif; color: var(--text); position: relative; overflow: hidden; }
+
+  .art { position: absolute; inset: 0; background: url(bg.png) center top / cover no-repeat; }
+  /* darken top for header/title contrast, fade bottom into navy for copy */
+  .shade { position: absolute; inset: 0; background:
+      linear-gradient(180deg, rgba(10,18,34,.85) 0%, rgba(10,18,34,.35) 22%, rgba(10,18,34,0) 34%),
+      linear-gradient(0deg, var(--bg) 0%, var(--bg) 24%, rgba(10,18,34,.9) 34%, rgba(10,18,34,0) 48%); }
+  /* faint blueprint grid */
+  .grid { position: absolute; inset: 0; opacity: .07; background-image:
+      linear-gradient(var(--gold) 1px, transparent 1px), linear-gradient(90deg, var(--gold) 1px, transparent 1px);
+      background-size: 54px 54px; mask-image: linear-gradient(0deg, #000 0%, #000 30%, transparent 55%); }
+
+  .frame { position: absolute; inset: 34px; border: 1px solid rgba(243,180,51,.18); }
+  .crop { position: absolute; width: 30px; height: 30px; border-color: var(--gold); border-style: solid; }
+  .crop.tl { top: 26px; left: 26px; border-width: 3px 0 0 3px; }
+  .crop.tr { top: 26px; right: 26px; border-width: 3px 3px 0 0; }
+  .crop.bl { bottom: 26px; left: 26px; border-width: 0 0 3px 3px; }
+  .crop.br { bottom: 26px; right: 26px; border-width: 0 3px 3px 0; }
+
+  .kicker { position: absolute; top: 86px; left: 80px; direction: ltr; font-weight: 700; font-size: 22px;
+      letter-spacing: .32em; color: var(--gold); }
+  .logo { position: absolute; top: 64px; right: 76px; width: 92px; }
+
+  .time-wrap { position: absolute; top: 178px; right: 78px; text-align: right; }
+  .time-label { font-weight: 500; font-size: 28px; color: var(--gold); margin-bottom: -6px; }
+  .time { direction: ltr; font-weight: 900; font-size: 168px; line-height: 1.05; color: var(--gold);
+      text-shadow: 0 0 40px rgba(243,180,51,.45), 0 6px 24px rgba(0,0,0,.55); }
+
+  .copy { position: absolute; right: 80px; left: 80px; bottom: 210px; }
+  .rule { width: 150px; height: 3px; background: linear-gradient(90deg, transparent, var(--gold)); margin: 0 0 30px auto; }
+  .pain { font-weight: 700; font-size: 38px; line-height: 1.75; }
+  .pain:nth-child(3) { color: #C9D3E2; } .pain:nth-child(4) { color: var(--muted); }
+  .answer { font-weight: 900; font-size: 44px; margin-top: 26px; }
+  .answer span { color: var(--gold); }
+
+  .footer { position: absolute; left: 80px; right: 80px; bottom: 74px; display: flex; justify-content: space-between;
+      align-items: center; border-top: 1px solid rgba(243,180,51,.22); padding-top: 26px; }
+  .footer .sub { font-size: 23px; color: var(--muted); }
+  .footer .url { direction: ltr; font-weight: 700; font-size: 27px; letter-spacing: .06em; color: var(--text); }
+  .footer .url b { color: var(--gold); font-weight: 700; }
+</style>
+</head>
+<body>
+  <div class="art"></div>
+  <div class="shade"></div>
+  <div class="grid"></div>
+  <div class="frame"></div>
+  <i class="crop tl"></i><i class="crop tr"></i><i class="crop bl"></i><i class="crop br"></i>
+
+  <div class="kicker">A DAY WITH CIVILDESK</div>
+  <img class="logo" src="logo.svg" alt="CivilDesk">
+
+  <div class="time-wrap">
+    <div class="time-label">صبح · کارگاهِ جاده‌سازی</div>
+    <div class="time">۰۷:۳۰</div>
+  </div>
+
+  <div class="copy">
+    <div class="rule"></div>
+    <div class="pain">گزارشِ دیروز هنوز نرسیده.</div>
+    <div class="pain">هزینهٔ این هفته معلوم نیست.</div>
+    <div class="pain">پروژه جلو است یا عقب؟</div>
+    <div class="answer">همهٔ پاسخ‌ها، <span>در یک سامانه.</span></div>
+  </div>
+
+  <div class="footer">
+    <div class="sub">یک روز با CivilDesk — قسمتِ اول، به‌زودی</div>
+    <div class="url"><b>◉</b> civildesk.ir</div>
+  </div>
+</body>
+</html>
