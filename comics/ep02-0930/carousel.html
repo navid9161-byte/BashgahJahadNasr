@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>CivilDesk Comic Ep2</title>
+<style>
+  @font-face { font-family: Vazirmatn; font-weight: 400; src: url(fonts/vazirmatn-400.ttf); }
+  @font-face { font-family: Vazirmatn; font-weight: 500; src: url(fonts/vazirmatn-500.ttf); }
+  @font-face { font-family: Vazirmatn; font-weight: 700; src: url(fonts/vazirmatn-700.ttf); }
+  @font-face { font-family: Vazirmatn; font-weight: 900; src: url(fonts/vazirmatn-900.ttf); }
+  :root { --bg:#0A1222; --navy:#13213D; --navy2:#1B2D50; --gold:#F3B433; --gold2:#FFD166; --text:#E8EDF5; --muted:#93A4BB; --ink:#0A1222; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#000; font-family:Vazirmatn, sans-serif; color:var(--text); }
+  .slide { width:1080px; height:1350px; position:relative; overflow:hidden; margin-bottom:20px;
+    background: radial-gradient(ellipse at 50% 0%, var(--navy2) 0%, var(--bg) 60%); }
+  .slide::before { content:""; position:absolute; inset:0; opacity:.06; pointer-events:none;
+    background-image:linear-gradient(var(--gold) 1px,transparent 1px),linear-gradient(90deg,var(--gold) 1px,transparent 1px);
+    background-size:54px 54px; }
+  .crop { position:absolute; width:30px; height:30px; border:solid var(--gold); z-index:5; }
+  .crop.tl{top:22px;left:22px;border-width:3px 0 0 3px}.crop.tr{top:22px;right:22px;border-width:3px 3px 0 0}
+  .crop.bl{bottom:22px;left:22px;border-width:0 0 3px 3px}.crop.br{bottom:22px;right:22px;border-width:0 3px 3px 0}
+
+  /* header / footer */
+  .head { position:absolute; top:44px; right:40px; left:40px; height:56px; display:flex; align-items:center; justify-content:space-between; z-index:4; }
+  .head .ep { font-weight:700; font-size:26px; color:var(--gold); }
+  .head .ep span { color:var(--muted); font-weight:500; }
+  .head img { height:52px; }
+  .foot { position:absolute; bottom:40px; right:40px; left:40px; display:flex; justify-content:space-between; align-items:center; z-index:4; }
+  .foot .pg { direction:ltr; font-weight:700; font-size:24px; letter-spacing:.2em; color:var(--muted); }
+  .foot .pg b { color:var(--gold); }
+  .foot .url { direction:ltr; font-weight:700; font-size:24px; letter-spacing:.05em; }
+  .foot .url b { color:var(--gold); }
+
+  /* panels */
+  .panel { position:absolute; overflow:hidden; border:4px solid #F5F1E8; outline:2px solid var(--ink); background:#000;
+    box-shadow:0 10px 30px rgba(0,0,0,.5); }
+  .panel > img.art { width:100%; height:100%; object-fit:cover; display:block; }
+
+  /* speech balloons */
+  .bal { position:absolute; background:#fff; color:#111; border:3px solid #111; border-radius:30px; padding:14px 24px;
+    font-weight:700; font-size:29px; line-height:1.5; text-align:center; z-index:2; box-shadow:4px 5px 0 rgba(0,0,0,.35); }
+  .bal::after { content:""; position:absolute; width:26px; height:26px; background:#fff; border:3px solid #111;
+    border-top:none; border-left:none; transform:rotate(45deg); }
+  .bal.t-bl::after { bottom:-15px; left:42px; } .bal.t-br::after { bottom:-15px; right:42px; }
+  .bal.t-b::after { bottom:-15px; left:calc(50% - 13px); }
+  .bal.t-l::after { left:-15px; top:calc(50% - 13px); transform:rotate(135deg); }
+  .bal.t-r::after { right:-15px; top:calc(50% - 13px); transform:rotate(-45deg); }
+  .bal.t-tr::after { top:-15px; right:42px; transform:rotate(-135deg); }
+  .bal.shout { border-radius:8px; font-weight:900; font-size:34px; transform:rotate(-2deg); }
+  .thought { position:absolute; background:#fff; color:#333; border:3px solid #111; border-radius:50%; padding:22px 30px;
+    font-weight:500; font-style:normal; font-size:27px; text-align:center; z-index:2; }
+  .thought i { position:absolute; background:#fff; border:3px solid #111; border-radius:50%; }
+
+  /* narration caption */
+  .cap { position:absolute; background:var(--bg); color:var(--gold); border:2px solid var(--gold); padding:10px 20px;
+    font-weight:700; font-size:26px; line-height:1.5; z-index:2; }
+  .cap.light { background:#F5F1E8; color:var(--ink); border-color:var(--ink); }
+
+  /* sound effects */
+  .sfx { position:absolute; direction:rtl; font-weight:900; color:var(--gold2); z-index:2; letter-spacing:.02em;
+    -webkit-text-stroke:3px var(--ink); paint-order:stroke fill; text-shadow:5px 5px 0 var(--ink); }
+
+  /* ---- slide 1 cover ---- */
+  .cover .art { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 30%; }
+  .cover .shade { position:absolute; inset:0; background:
+      linear-gradient(180deg, rgba(10,18,34,.95) 0%, rgba(10,18,34,.9) 24%, rgba(10,18,34,.35) 34%, rgba(10,18,34,0) 44%),
+      linear-gradient(0deg, rgba(10,18,34,.95) 0%, rgba(10,18,34,.6) 12%, rgba(10,18,34,0) 25%); }
+  .cover .kicker { position:absolute; top:62px; left:70px; direction:ltr; font-weight:700; font-size:22px; letter-spacing:.32em; color:var(--gold); z-index:3; }
+  .cover .logo { position:absolute; top:50px; right:66px; width:92px; z-index:3; }
+  .cover .title { position:absolute; top:150px; right:70px; text-align:right; z-index:3; }
+  .cover .badge { display:inline-block; background:var(--gold); color:var(--ink); font-weight:900; font-size:24px; padding:6px 18px; margin-bottom:6px; }
+  .cover .time { direction:ltr; font-weight:900; font-size:176px; line-height:1.02; color:var(--gold); text-shadow:0 0 40px rgba(243,180,51,.45),0 6px 24px rgba(0,0,0,.6); }
+  .cover .name { font-weight:900; font-size:56px; color:#fff; text-shadow:0 4px 18px rgba(0,0,0,.7); }
+  .cover .bottom { position:absolute; bottom:58px; left:70px; right:70px; display:flex; justify-content:space-between; align-items:flex-end; z-index:3; }
+  .cover .swipe { font-weight:700; font-size:28px; color:var(--gold); }
+  .cover .who { font-size:22px; color:var(--muted); }
+
+  /* phone mockup */
+  .phone-wrap { position:absolute; display:flex; align-items:center; justify-content:center;
+    background: radial-gradient(circle at 50% 45%, rgba(243,180,51,.45) 0%, rgba(243,180,51,.08) 45%, var(--bg) 75%); }
+  .phone { width:290px; height:560px; border-radius:42px; background:#0b0b0d; padding:12px; border:2px solid #3a3f4a;
+    box-shadow:0 0 50px rgba(243,180,51,.55), 0 20px 40px rgba(0,0,0,.6); position:relative; }
+  .phone img { width:100%; height:100%; object-fit:cover; object-position:top; border-radius:32px; display:block; }
+  .phone .notch { position:absolute; top:22px; left:50%; transform:translateX(-50%); width:90px; height:24px; background:#0b0b0d; border-radius:14px; }
+  .tap { position:absolute; width:120px; height:120px; border-radius:50%; border:4px solid var(--gold);
+    box-shadow:0 0 0 10px rgba(243,180,51,.25), 0 0 30px var(--gold); }
+
+  /* slogan strip */
+  .slogan { position:absolute; z-index:2; background:linear-gradient(90deg, rgba(10,18,34,0), rgba(10,18,34,.92) 25%, rgba(10,18,34,.92));
+    color:var(--gold); font-weight:900; font-size:38px; padding:10px 28px; }
+
+  /* slide 5 */
+  .next-tag { position:absolute; top:735px; right:70px; font-weight:700; font-size:26px; color:var(--muted); }
+  .next-title { position:absolute; top:780px; right:70px; font-weight:900; font-size:60px; }
+  .next-title span { color:var(--gold); direction:ltr; display:inline-block; }
+  .chips { position:absolute; top:900px; right:70px; left:70px; display:flex; gap:14px; flex-wrap:wrap; }
+  .chip { border:1.5px solid rgba(243,180,51,.55); color:var(--text); font-weight:500; font-size:24px; padding:8px 20px; border-radius:40px; }
+  .chip-label { position:absolute; top:860px; right:70px; font-size:22px; color:var(--muted); }
+  .cta { position:absolute; top:1010px; right:70px; left:70px; background:var(--gold); color:var(--ink); font-weight:900; font-size:36px;
+    padding:26px 36px; display:flex; justify-content:space-between; align-items:center; }
+  .cta small { direction:ltr; font-size:30px; font-weight:900; }
+  .fine { position:absolute; top:1130px; right:70px; font-size:20px; color:var(--muted); }
+  .big-logo { position:absolute; top:1150px; left:70px; width:96px; }
+</style>
+</head>
+<body>
+<style>
+  .laptop-wrap { position:absolute; display:flex; align-items:center; justify-content:center;
+    background: radial-gradient(circle at 50% 45%, rgba(243,180,51,.4) 0%, rgba(243,180,51,.08) 45%, var(--bg) 75%); }
+  .laptop { position:relative; width:500px; }
+  .laptop .screen { background:#0b0b0d; border:2px solid #3a3f4a; border-radius:14px 14px 0 0; padding:10px; box-shadow:0 0 50px rgba(243,180,51,.5); }
+  .laptop .screen img { width:100%; aspect-ratio:16/10; object-fit:cover; object-position:right top; display:block; border-radius:4px; }
+  .laptop .base { height:16px; background:linear-gradient(#5a606c,#2a2e36); border-radius:0 0 18px 18px; margin:0 -26px; }
+  .hl { position:absolute; border:3px solid var(--gold); border-radius:6px; box-shadow:0 0 18px var(--gold); }
+</style>
+
+<!-- ================= SLIDE 1: COVER ================= -->
+<section class="slide cover" id="s1">
+  <img class="art" src="panels/panel-1-1.png" alt="">
+  <div class="shade"></div>
+  <i class="crop tl"></i><i class="crop tr"></i><i class="crop bl"></i><i class="crop br"></i>
+  <div class="kicker">A DAY WITH CIVILDESK</div>
+  <img class="logo" src="logo.svg" alt="CivilDesk">
+  <div class="title">
+    <div class="badge">قسمتِ دوم</div>
+    <div class="time">۰۹:۳۰</div>
+    <div class="name">کالا کجاست؟</div>
+  </div>
+  <div class="sfx" style="top:700px; left:110px; font-size:54px; transform:rotate(-8deg);">تَق… تَق…</div>
+  <div class="bottom">
+    <div class="swipe">ورق بزنید ←</div>
+    <div class="who">داستانی ساختگی · یک روز با CivilDesk</div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 2: PROBLEM ================= -->
+<section class="slide" id="s2">
+  <i class="crop tl"></i><i class="crop tr"></i><i class="crop bl"></i><i class="crop br"></i>
+  <div class="head"><div class="ep">۰۹:۳۰ <span>· کالا کجاست؟</span></div><img src="logo.svg" alt=""></div>
+
+  <div class="panel" style="top:120px; right:40px; width:1000px; height:560px;">
+    <img class="art" src="panels/panel-2-1.png" alt="">
+    <div class="cap" style="top:0; right:0;">۰۹:۳۰ — دفترِ تأمین</div>
+    <div style="position:absolute; top:200px; left:330px; width:250px; height:170px; z-index:2; background:#FFD166; border:3px solid #0A1222; clip-path:polygon(50% 0,61% 22%,85% 8%,78% 34%,100% 42%,80% 58%,96% 82%,68% 74%,60% 100%,46% 78%,22% 96%,26% 70%,0 66%,18% 48%,2% 24%,30% 28%); transform:rotate(-8deg); display:flex; align-items:center; justify-content:center; font-weight:900; font-size:38px; color:#0A1222;">دیرینگ!</div>
+    <div class="bal shout t-br" style="top:70px; right:330px; width:330px; font-size:31px;">کالا کجاست؟!<br><span style="font-size:24px; font-weight:700;">همین الان می‌گم کجاست…</span></div>
+  </div>
+
+  <div class="panel" style="top:700px; right:40px; width:560px; height:560px;">
+    <img class="art" src="panels/panel-2-2-c.png" alt="" style="object-position:center 30%;">
+    <div class="cap" style="top:0; right:0;">کارگاه</div>
+    <div class="bal t-bl" style="top:60px; right:26px; width:330px; font-size:26px;">فیلترِ روغنِ لودر رو سه روز پیش خواستیم!</div>
+  </div>
+
+  <div class="panel" style="top:700px; left:40px; width:420px; height:560px;">
+    <img class="art" src="panels/panel-2-3-c.png" alt="">
+    <div class="cap light" style="top:0; left:0; right:0; text-align:center;">درخواست روی کاغذ…<br>گم در میانِ کاغذها.</div>
+    <div class="cap" style="bottom:0; left:0; right:0; text-align:center; color:#FF6B6B; border-color:#FF6B6B;">هر ساعت توقف، یعنی هزینه.</div>
+  </div>
+
+  <div class="foot"><div class="url"><b>◉</b> civildesk.ir</div><div class="pg"><b>02</b> / 05</div></div>
+</section>
+
+<!-- ================= SLIDE 3: TURNING POINT ================= -->
+<section class="slide" id="s3">
+  <i class="crop tl"></i><i class="crop tr"></i><i class="crop bl"></i><i class="crop br"></i>
+  <div class="head"><div class="ep">۰۹:۳۰ <span>· کالا کجاست؟</span></div><img src="logo.svg" alt=""></div>
+
+  <div class="panel" style="top:120px; right:40px; width:1000px; height:560px;">
+    <img class="art" src="panels/panel-3-1.png" alt="">
+    <div class="bal t-bl" style="top:20px; left:120px; width:420px; font-size:27px;">هر درخواست یه شمارهٔ پیگیری داره.<br>ببین کجای کار گیر کرده.</div>
+  </div>
+
+  <div class="panel laptop-wrap" style="top:700px; right:40px; width:560px; height:560px;">
+    <div class="laptop">
+      <div class="screen"><img src="requests.jpg" alt="درخواست کالا"></div>
+      <div class="base"></div>
+      <div class="hl" style="top:60px; left:218px; width:68px; height:42px;"></div>
+    </div>
+    <div class="cap" style="bottom:0; left:0; right:0; text-align:center; font-size:24px;">درخواستِ کالا — وضعیتِ هر قلم، با شمارهٔ پیگیری.</div>
+  </div>
+
+  <div class="panel" style="top:700px; left:40px; width:420px; height:560px;">
+    <img class="art" src="panels/panel-3-3-c.png" alt="" style="object-position:30% center;">
+    <div class="bal t-bl" style="top:20px; right:20px; width:340px; font-size:25px;">انبارِ کارگاهِ کناری دوتا داره! انتقال می‌دیم.</div>
+    <div class="cap" style="bottom:0; left:0; right:0; text-align:center; font-size:21px;">خریدِ مرکزیِ گروه — موجودیِ همهٔ انبارها، پیش از خرید.</div>
+  </div>
+
+  <div class="foot"><div class="url"><b>◉</b> civildesk.ir</div><div class="pg"><b>03</b> / 05</div></div>
+</section>
+
+<!-- ================= SLIDE 4: RESULT ================= -->
+<section class="slide" id="s4">
+  <i class="crop tl"></i><i class="crop tr"></i><i class="crop bl"></i><i class="crop br"></i>
+  <div class="head"><div class="ep">۰۹:۳۰ <span>· کالا کجاست؟</span></div><img src="logo.svg" alt=""></div>
+
+  <div class="panel" style="top:120px; right:40px; width:560px; height:700px;">
+    <img class="art" src="panels/panel-4-1-c.png" alt="" style="object-position:center 40%;">
+    <div class="cap" style="top:0; right:0;">۱۰:۳۰ — کارگاه</div>
+    <div class="bal t-bl" style="top:70px; left:30px; width:330px; font-size:26px;">فیلتر، از انبارِ کارگاهِ شمالی!</div>
+    <div class="sfx" style="bottom:120px; left:30px; font-size:48px; transform:rotate(-8deg);">بوق‌بوق!</div>
+  </div>
+
+  <div class="panel phone-wrap" style="top:120px; left:40px; width:420px; height:700px;">
+    <div class="phone" style="transform:scale(.95) rotate(3deg);">
+      <div class="notch"></div>
+      <img src="site-mode.jpg" alt="حالت کارگاه">
+      <div class="tap" style="top:252px; left:21px;"></div>
+    </div>
+    <div class="sfx" style="top:40px; left:30px; font-size:48px; transform:rotate(-10deg);">تیک!</div>
+    <div class="cap" style="bottom:0; left:0; right:0; text-align:center; font-size:21px;">رسیدِ کالا از همان کارگاه — موجودی خودش به‌روز می‌شود.</div>
+  </div>
+
+  <div class="panel" style="top:840px; right:40px; width:1000px; height:420px;">
+    <img class="art" src="panels/panel-4-3.png" alt="" style="object-position:center 30%;">
+    <div class="bal t-r" style="top:30px; right:330px; width:310px; font-size:30px;">یک ساعت!<br>نه سه روز.</div>
+    <div class="slogan" style="bottom:0; right:0; left:0; text-align:right;">از درخواست تا رسید، یک‌جا.</div>
+  </div>
+
+  <div class="foot"><div class="url"><b>◉</b> civildesk.ir</div><div class="pg"><b>04</b> / 05</div></div>
+</section>
+
+<!-- ================= SLIDE 5: NEXT + CTA ================= -->
+<section class="slide" id="s5">
+  <i class="crop tl"></i><i class="crop tr"></i><i class="crop bl"></i><i class="crop br"></i>
+  <div class="head"><div class="ep">قسمتِ بعد <span>· به‌زودی</span></div><img src="logo.svg" alt=""></div>
+
+  <div class="panel" style="top:120px; right:40px; width:1000px; height:580px;">
+    <img class="art" src="panels/panel-5-1-c.png" alt="">
+    <div class="cap" style="top:0; right:0;">قسمتِ بعد · ۱۱:۰۰</div>
+    <div class="bal shout t-bl" style="top:60px; left:60px; width:360px; font-size:36px;">طلبِ من کی پرداخت می‌شه؟</div>
+    <div class="sfx" style="bottom:60px; left:420px; font-size:56px; transform:rotate(-6deg);">بَنگ!</div>
+  </div>
+
+  <div class="next-tag">قسمتِ سوم</div>
+  <div class="next-title"><span>۱۱:۰۰</span> — صورت‌وضعیت</div>
+
+  <div class="chips">
+    <div class="chip">درخواستِ کالا</div>
+    <div class="chip">خریدِ مرکزیِ گروه</div>
+    <div class="chip">انبارِ کارگاه</div>
+    <div class="chip">رسیدِ کالا</div>
+  </div>
+
+  <div class="cta">برایِ دیدنِ دموی CivilDesk پیام دهید <small>civildesk.ir</small></div>
+  <div class="fine">شخصیت‌ها، نام‌ها و داده‌ها ساختگی‌اند.</div>
+
+  <div class="foot"><div class="url"><b>◉</b> civildesk.ir</div><div class="pg"><b>05</b> / 05</div></div>
+</section>
+
+</body>
+</html>
