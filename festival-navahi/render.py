@@ -124,7 +124,7 @@ def place(frame, img, final_x, final_y, start_x, t, side):
     frame.alpha_composite(rot, (fx, fy))
 
 
-def frame_at(t):
+def frame_at(t, musicians=True):
     # title reveal 0.1-1.5 s
     k = ease_out((t - 0.1) / 1.4)
     base = no_title * (1 - k) + plate_np * k
@@ -146,8 +146,9 @@ def frame_at(t):
             reg[:, c] = np.roll(base[FY0:FY1, x0 + c], int(round(dy)), axis=0)
         base[FY0:FY1, x0:x1] = reg
     frame = Image.fromarray(base.astype(np.uint8)).convert('RGBA')
-    place(frame, L, LX, LY, -L.width - 30, t, 'L')
-    place(frame, R, RX, RY, W + 30, t, 'R')
+    if musicians:
+        place(frame, L, LX, LY, -L.width - 30, t, 'L')
+        place(frame, R, RX, RY, W + 30, t, 'R')
     return frame.convert('RGB')
 
 
