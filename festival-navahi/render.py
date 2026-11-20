@@ -13,7 +13,7 @@ import numpy as np
 from PIL import Image, ImageFilter
 
 W, H, FPS, DUR = 1080, 1920, 30, 20.0
-MUSIC = 'work/music2.mp3'          # v2: happier track, 21 s
+MUSIC = 'work/music2-final.mp3'    # v2: happier, ney-forward, extended to 20 s on the beat + EQ
 RAW = 'work/music2.raw'
 S = 1.5                      # 720 -> 1080 scale
 BG = np.array([252, 215, 127], float)
