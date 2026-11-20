@@ -12,17 +12,21 @@ import subprocess
 import numpy as np
 from PIL import Image, ImageFilter
 
-W, H, FPS, DUR = 1080, 1920, 30, 15.0
+W, H, FPS, DUR = 1080, 1920, 30, 20.0
+MUSIC = 'work/music2.mp3'          # v2: happier track, 21 s
+RAW = 'work/music2.raw'
 S = 1.5                      # 720 -> 1080 scale
 BG = np.array([252, 215, 127], float)
-BPM = 99.0
 
 # ---------------------------------------------------------------- beat grid
-x = np.fromfile('work/music.raw', dtype=np.int16).astype(float) / 32768
+x = np.fromfile(RAW, dtype=np.int16).astype(float) / 32768
 sr, hop = 22050, 512
 env = np.array([np.sqrt((x[i*hop:(i+1)*hop]**2).mean()) for i in range(len(x)//hop)])
 onset = np.maximum(np.diff(env), 0)
 ofps = sr / hop
+_on = onset - onset.mean()
+_ac = np.correlate(_on, _on, 'full')[len(_on) - 1:]
+BPM = float(max(range(70, 181), key=lambda b: np.interp(ofps * 60 / b, np.arange(len(_ac)), _ac)))
 period = 60.0 / BPM
 best = max(np.linspace(0, period, 40, endpoint=False),
            key=lambda ph: sum(np.interp((ph + k*period) * ofps, np.arange(len(onset)), onset)
@@ -161,12 +165,12 @@ if __name__ == '__main__':
     n = int(DUR * FPS)
     ff = subprocess.Popen(
         ['ffmpeg', '-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', f'{W}x{H}',
-         '-r', str(FPS), '-i', '-', '-i', 'work/music.mp3',
+         '-r', str(FPS), '-i', '-', '-i', MUSIC,
          '-af', f'afade=t=in:st=0:d=0.3,afade=t=out:st={DUR-1.2}:d=1.2', '-t', str(DUR),
          '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '18', '-preset', 'medium',
-         '-c:a', 'aac', '-b:a', '192k', '-movflags', '+faststart', 'out/navahi-reel.mp4'],
+         '-c:a', 'aac', '-b:a', '192k', '-movflags', '+faststart', 'out/navahi-reel-20s.mp4'],
         stdin=subprocess.PIPE)
     for i in range(n):
         ff.stdin.write(frame_at(i / FPS).tobytes())
     ff.stdin.close(); ff.wait()
-    print('beat phase', round(PHASE, 3), 'done')
+    print('bpm', BPM, 'beat phase', round(PHASE, 3), 'done')

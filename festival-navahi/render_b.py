@@ -5,7 +5,7 @@ yellow is keyed out, the clip is scaled to the musician's poster size and slid
 in from off-frame, then loops in place (start frame == end frame, so the loop is
 seamless).  Background effects (title, rings, flags) come from render.py.
 
-Usage: python3 render_b.py            -> out/navahi-reel-b.mp4
+Usage: python3 render_b.py            -> out/navahi-reel-b-20s.mp4
        python3 render_b.py 2 6        -> preview stills in work/
 """
 import math
@@ -87,10 +87,10 @@ def main():
         return
     ff = subprocess.Popen(
         ['ffmpeg', '-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', f'{W}x{H}',
-         '-r', str(FPS), '-i', '-', '-i', 'work/music.mp3',
+         '-r', str(FPS), '-i', '-', '-i', R0.MUSIC,
          '-af', f'afade=t=in:st=0:d=0.3,afade=t=out:st={DUR-1.2}:d=1.2', '-t', str(DUR),
          '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '18', '-preset', 'medium',
-         '-c:a', 'aac', '-b:a', '192k', '-movflags', '+faststart', 'out/navahi-reel-b.mp4'],
+         '-c:a', 'aac', '-b:a', '192k', '-movflags', '+faststart', 'out/navahi-reel-b-20s.mp4'],
         stdin=subprocess.PIPE)
     for i in range(int(DUR * FPS)):
         ff.stdin.write(frame_b(i / FPS).tobytes())
